@@ -1,0 +1,74 @@
+from sklearn.cluster import KMeans
+import pandas as pd
+from sklearn.preprocessing import MinMaxScaler
+from matplotlib import pyplot as plt
+
+df=pd.read_csv('/content/drive/MyDrive/Semester projects/Semester 5/Semester 5 AI/AI Lab 4/Iris.csv')
+df
+x=df[['PetalLengthCm','PetalWidthCm']]
+y=df['Species']
+
+plt.scatter(df.PetalLengthCm,df['PetalWidthCm'])
+plt.xlabel('PetalLengthC')
+plt.ylabel('PetalWidthCm')
+
+km = KMeans(n_clusters=3)
+km
+
+
+y_predicted = km.fit_predict(df[['PetalLengthCm','PetalWidthCm']])
+y_predicted
+
+x['cluster']=y_predicted
+x.head()
+
+km.cluster_centers_
+
+df1 = df[x.cluster==0]
+df2 = df[x.cluster==1]
+df3 = df[x.cluster==2]
+plt.scatter(df1.PetalLengthCm,df1['PetalWidthCm'],color='green')
+plt.scatter(df2.PetalLengthCm,df2['PetalWidthCm'],color='red')
+plt.scatter(df3.PetalLengthCm,df3['PetalWidthCm'],color='black')
+plt.scatter(km.cluster_centers_[:,0],km.cluster_centers_[:,1],color='purple',marker='*',label='centroid')
+plt.xlabel('Length')
+plt.ylabel('Width')
+plt.legend()
+
+scaler = MinMaxScaler()
+
+scaler.fit(df[['PetalWidthCm']])
+df['PetalWidthCm'] = scaler.transform(df[['PetalWidthCm']])
+
+scaler.fit(df[['PetalLengthCm']])
+df['PetalLengthCm'] = scaler.transform(df[['PetalLengthCm']])
+
+plt.scatter(df.PetalLengthCm,df['PetalWidthCm'])
+
+km = KMeans(n_clusters=3)
+y_predicted = km.fit_predict(df[['PetalLengthCm','PetalWidthCm']])
+y_predicted
+df['cluster']=y_predicted
+df.head()
+km.cluster_centers_
+df1 = df[df.cluster==0]
+df2 = df[df.cluster==1]
+df3 = df[df.cluster==2]
+plt.scatter(df1.PetalLengthCm,df1['PetalWidthCm'],color='green')
+plt.scatter(df2.PetalLengthCm,df2['PetalWidthCm'],color='red')
+plt.scatter(df3.PetalLengthCm,df3['PetalWidthCm'],color='black')
+plt.scatter(km.cluster_centers_[:,0],km.cluster_centers_[:,1],color='purple',marker='*',label='centroid')
+plt.xlabel('Length')
+plt.ylabel('Width')
+plt.legend()
+
+sse = []
+k_rng = range(1,10)
+for k in k_rng:
+    km = KMeans(n_clusters=k)
+    km.fit(df[['PetalLengthCm','PetalWidthCm']])
+    sse.append(km.inertia_)
+
+plt.xlabel('K')
+plt.ylabel('Sum of squared error')
+plt.plot(k_rng,sse)
