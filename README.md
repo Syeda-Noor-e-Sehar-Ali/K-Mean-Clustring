@@ -1,2 +1,2 @@
 # K-Mean-Clustring
-This code contains the functionality of kmean clustering
+This code contains the functionality of kmean clustering.K-Means Clustering partitions data into k clusters by iteratively assigning points to the nearest centroid and updating centroids based on the mean of assigned points. It aims to minimize the sum of squared distances within each cluster. Convergence occurs when centroids stabilize or after a set number of iterations. The algorithm is widely used for clustering tasks in unsupervised learning, providing insights into data structure and patterns.
